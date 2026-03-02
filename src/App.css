@@ -45,10 +45,23 @@
 }
 
 /* ── Grid de cards ── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .characters-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 1.5rem;
+  animation: fadeInUp 0.35s ease both;
 }
 
 /* ── Card del personaje (es un <a> via Link) ── */

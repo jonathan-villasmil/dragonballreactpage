@@ -1,29 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CharacterData } from '../types';
 import '../App.css';
-
-interface CharacterData {
-    id: number;
-    name: string;
-    image: string;
-    ki: number;
-    maxKi: number;
-    race: string;
-    gender: string;
-    description: string;
-    affiliation: string;
-    originPlanet?: {
-        name: string;
-        image: string;
-        description: string;
-    };
-    transformations?: {
-        id: number;
-        name: string;
-        image: string;
-        ki: string;
-    }[];
-}
 
 export const CharacterDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();

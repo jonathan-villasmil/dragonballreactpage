@@ -1,32 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { Character } from './components/Character';
+import { DataCharacter } from './types';
 import './App.css';
-
-interface CharacterData {
-  id: number;
-  name: string;
-  image: string;
-  ki: number;
-  maxKi: number;
-  race: string;
-  gender: string;
-  description: string;
-  affiliation: string;
-}
-
-interface Meta {
-  totalItems: number;
-  itemCount: number;
-  itemsPerPage: number;
-  totalPages: number;
-  currentPage: number;
-}
-
-interface DataCharacter {
-  items: CharacterData[];
-  links: object;
-  meta: Meta;
-}
 
 const LIMIT = 12;
 
@@ -63,10 +38,6 @@ export const App: React.FC = () => {
     getCharacters();
   }, [page]);
 
-  // Reset filters and go to page 1 when a filter changes
-  const handleSearch = (val: string) => { setSearch(val); };
-  const handleRace = (val: string) => { setRaceFilter(val); };
-  const handleAffiliation = (val: string) => { setAffiliationFilter(val); };
 
   // Unique options from current page data
   const races = useMemo(() => {
@@ -144,16 +115,17 @@ export const App: React.FC = () => {
             className="filter-input"
             placeholder="Buscar en esta página..."
             value={search}
-            onChange={(e) => handleSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
+            aria-label="Buscar personaje por nombre"
           />
         </div>
 
-        <select className="filter-select" value={raceFilter} onChange={(e) => handleRace(e.target.value)}>
+        <select className="filter-select" value={raceFilter} onChange={(e) => { setRaceFilter(e.target.value); setPage(1); }} aria-label="Filtrar por raza">
           <option value="">Todas las razas</option>
           {races.map(r => <option key={r} value={r}>{r}</option>)}
         </select>
 
-        <select className="filter-select" value={affiliationFilter} onChange={(e) => handleAffiliation(e.target.value)}>
+        <select className="filter-select" value={affiliationFilter} onChange={(e) => { setAffiliationFilter(e.target.value); setPage(1); }} aria-label="Filtrar por afiliación">
           <option value="">Todas las afiliaciones</option>
           {affiliations.map(a => <option key={a} value={a}>{a}</option>)}
         </select>
@@ -179,7 +151,7 @@ export const App: React.FC = () => {
           <p className="no-results-hint">Prueba con otro nombre o filtro</p>
         </div>
       ) : (
-        <main className="characters-grid">
+        <main className="characters-grid" key={page}>
           {filtered.map((character) => (
             <Character key={character.id} character={character} />
           ))}
@@ -187,19 +159,19 @@ export const App: React.FC = () => {
       )}
 
       {/* Pagination */}
-      <nav className="pagination">
+      <nav className="pagination" aria-label="Paginación">
         <button
           className="page-btn page-btn--arrow"
           onClick={() => setPage(1)}
           disabled={page === 1}
-          title="Primera página"
+          aria-label="Primera página"
         >«</button>
 
         <button
           className="page-btn page-btn--arrow"
           onClick={() => setPage(p => Math.max(1, p - 1))}
           disabled={page === 1}
-          title="Anterior"
+          aria-label="Página anterior"
         >‹</button>
 
         {pageNumbers.map(n => (
@@ -207,6 +179,8 @@ export const App: React.FC = () => {
             key={n}
             className={`page-btn ${n === page ? 'page-btn--active' : ''}`}
             onClick={() => setPage(n)}
+            aria-label={`Página ${n}`}
+            aria-current={n === page ? 'page' : undefined}
           >
             {n}
           </button>
@@ -216,14 +190,14 @@ export const App: React.FC = () => {
           className="page-btn page-btn--arrow"
           onClick={() => setPage(p => Math.min(totalPages, p + 1))}
           disabled={page === totalPages}
-          title="Siguiente"
+          aria-label="Página siguiente"
         >›</button>
 
         <button
           className="page-btn page-btn--arrow"
           onClick={() => setPage(totalPages)}
           disabled={page === totalPages}
-          title="Última página"
+          aria-label="Última página"
         >»</button>
       </nav>
     </>

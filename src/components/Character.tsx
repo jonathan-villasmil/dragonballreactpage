@@ -1,17 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
-interface CharacterData {
-    id: number;
-    name: string;
-    image: string;
-    ki: number;
-    maxKi: number;
-    race: string;
-    gender: string;
-    description: string;
-    affiliation: string;
-}
+import { CharacterData } from "../types";
 
 interface CharacterProps {
     character: CharacterData;
@@ -19,7 +8,7 @@ interface CharacterProps {
 
 export const Character: React.FC<CharacterProps> = ({ character }) => {
     return (
-        <Link to={`/character/${character.id}`} className="character-card">
+        <Link to={`/character/${character.id}`} className="character-card" aria-label={`Ver detalles de ${character.name}`}>
             <div className="character-image-wrapper">
                 <img
                     src={character.image}
